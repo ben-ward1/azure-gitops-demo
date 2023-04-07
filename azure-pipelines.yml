@@ -11,7 +11,8 @@ stages:
 - stage: provision_storage
   jobs:
   - job: provision_storage
-    pool: ubuntu-latest
+    pool:
+      vmImage: ubuntu-latest
     steps:
     - task: AzureCLI@2
       inputs:
