@@ -11,9 +11,9 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-- stage: provision-storage
+- stage: provision_storage
   jobs:
-  - job: provision-storage
+  - job: provision_storage
     pool: ubuntu-latest
     steps:
     - task: AzureCLI@2
