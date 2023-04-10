@@ -20,8 +20,10 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          echo $rgName
-          echo $(rgName)
+          rgName=$(rgName)
+          suffix=$(suffix)
+          storageAccountName=$(storageAccountName)
+          containerName=$(containerName)
           
           storageAccount="${storageAccountName}${suffix}"
           
