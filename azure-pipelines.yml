@@ -100,6 +100,11 @@ stages:
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           environmentServiceNameAzureRM: 'az-service-connection'
+          backendServiceArm: 'az-service-connection'
+          backendAzureRmResourceGroupName: '$(rgName)'
+          backendAzureRmStorageAccountName: '$(storageAccountName)'
+          backendAzureRmContainerName: '$(containerName)'
+          backendAzureRmKey: 'terraform.tfstate'
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
@@ -107,3 +112,8 @@ stages:
           commandOptions: '-auto-approve'
           environmentServiceNameAzureRM: 'az-service-connection'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          backendServiceArm: 'az-service-connection'
+          backendAzureRmResourceGroupName: '$(rgName)'
+          backendAzureRmStorageAccountName: '$(storageAccountName)'
+          backendAzureRmContainerName: '$(containerName)'
+          backendAzureRmKey: 'terraform.tfstate'
