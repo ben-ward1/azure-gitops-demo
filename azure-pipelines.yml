@@ -132,6 +132,7 @@ stages:
       inputs:
         command: 'build'
         arguments: '--configuration $(buildConfiguration)'
+        workingDirectory: $(System.DefaultWorkingDirectory)/src
       displayName: 'dotnet build $(buildConfiguration)'
     - task: DotNetCoreCLI@2
       inputs:
