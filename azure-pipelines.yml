@@ -26,14 +26,12 @@ stages:
           containerName=$(containerName)
           azRegion=$(azRegion)
           
-          storageAccount="${storageAccountName}${suffix}"
-          
           rgExists=$(az group exists --name $rgName)
-          accountExists=false && az storage account show --name $storageAccount && accountExists=true
+          accountExists=false && az storage account show --name $storageAccountName && accountExists=true
           containerExists=$accountExists
           
           if $accountExists; then
-              containerExists=$(az storage container exists --account-name $storageAccount --name $containerName | jq '.exists == true')
+              containerExists=$(az storage container exists --account-name $storageAccountName --name $containerName | jq '.exists == true')
           fi
           
           echo $"rg exists: ${rgExists}"
@@ -48,16 +46,16 @@ stages:
           fi
           
           if ! $accountExists; then
-              echo $"Creating storage account ${storageAccount}"
-              az storage account create --name $storageAccount --resource-group $rgName --location $azRegion --sku Standard_LRS
+              echo $"Creating storage account ${storageAccountName}"
+              az storage account create --name $storageAccountName --resource-group $rgName --location $azRegion --sku Standard_LRS
           fi
           
           if ! $containerExists; then
-              echo $"Creating storage container ${containerName} for storage account ${storageAccount}"
-              az storage container create --name $containerName --account-name $storageAccount
+              echo $"Creating storage container ${containerName} for storage account ${storageAccountName}"
+              az storage container create --name $containerName --account-name $storageAccountName
           fi
           
           # Set storage account key as Pipeline variable.
-          storageKey=$(az storage account keys list --account-name $storageAccount | jq -r .[0].value)
+          storageKey=$(az storage account keys list --account-name $storageAccountName | jq -r .[0].value)
           echo $"##vso[task.setvariable variable=storageKey;isOutput=true]${storageKey}"
 
