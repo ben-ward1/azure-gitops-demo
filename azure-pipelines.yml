@@ -20,12 +20,15 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
+          echo $rgName
+          echo $(rgName)
+          
           storageAccount="${storageAccountName}${suffix}"
           
           rgExists=$(az group exists --name $rgName)
           accountExists=false && az storage account show --name $storageAccount && accountExists=true
           containerExists=$accountExists
-      
+          
           if $accountExists; then
               containerExists=$(az storage container exists --account-name $storageAccount --name $containerName | jq '.exists == true')
           fi
