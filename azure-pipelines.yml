@@ -59,46 +59,51 @@ stages:
           # Set storage account key as Pipeline variable.
           azStorageKey=$(az storage account keys list --account-name $storageAccountName | jq -r .[0].value)
           echo $"##vso[task.setvariable variable=storageKey;isOutput=true]${azStorageKey}"
-    - task: replacetokens@5
-      inputs:
-        targetFiles: '**/*.tf'
-        encoding: 'auto'
-        tokenPattern: 'rm'
-        writeBOM: true
-        actionOnMissing: 'fail'
-        keepToken: false
-        actionOnNoFiles: 'fail'
-        enableTransforms: false
-        enableRecursion: false
-        useLegacyPattern: false
-        enableTelemetry: true
-    - task: Bash@3
-      displayName: 'Test variable'
-      inputs:
-        targetType: 'inline'
-        script: 'echo $(storageKey)'
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-        backendServiceArm: 'az-service-connection'
-        backendAzureRmResourceGroupName: '$(rgName)'
-        backendAzureRmStorageAccountName: '$(storageAccountName)'
-        backendAzureRmContainerName: '$(containerName)'
-        backendAzureRmKey: 'terraform.tfstate'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-        environmentServiceNameAzureRM: 'az-service-connection'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        commandOptions: '-auto-approve'
-        environmentServiceNameAzureRM: 'az-service-connection'
+  - job: terraform
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: replacetokens@5
+        inputs:
+          targetFiles: '**/*.tf'
+          encoding: 'auto'
+          tokenPattern: 'rm'
+          writeBOM: true
+          actionOnMissing: 'fail'
+          keepToken: false
+          actionOnNoFiles: 'fail'
+          enableTransforms: false
+          enableRecursion: false
+          useLegacyPattern: false
+          enableTelemetry: true
+      - task: Bash@3
+        displayName: 'Test variable'
+        inputs:
+          targetType: 'inline'
+          script: 'echo $(storageKey)'
+      - task: TerraformInstaller@1
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          backendServiceArm: 'az-service-connection'
+          backendAzureRmResourceGroupName: '$(rgName)'
+          backendAzureRmStorageAccountName: '$(storageAccountName)'
+          backendAzureRmContainerName: '$(containerName)'
+          backendAzureRmKey: 'terraform.tfstate'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          environmentServiceNameAzureRM: 'az-service-connection'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          commandOptions: '-auto-approve'
+          environmentServiceNameAzureRM: 'az-service-connection'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
