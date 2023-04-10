@@ -44,12 +44,12 @@ stages:
           fi
           
           if ! $accountExists; then
-              echo $"Creating storage account ${storageAccountName}"
-              az storage account create --name $storageAccountName --resource-group $rgName --location $azRegion --sku Standard_LRS
+              echo $"Creating storage account ${storageAccount}"
+              az storage account create --name $storageAccount --resource-group $rgName --location $azRegion --sku Standard_LRS
           fi
           
           if ! $containerExists; then
-              echo $"Creating storage container ${containerName} for storage account ${storageAccountName}"
-              az storage container create --name $containerName --account-name $storageAccountName
+              echo $"Creating storage container ${containerName} for storage account ${storageAccount}"
+              az storage container create --name $containerName --account-name $storageAccount
           fi
 
