@@ -22,18 +22,14 @@ resource "azurerm_service_plan" "dev" {
   location            = azurerm_resource_group.dev.location
   resource_group_name = azurerm_resource_group.dev.name
   os_type             = "Windows"
-
-  sku {
-    tier = "Free"
-    size = "F1"
-  }
+  sku_name            = "F1"
 }
 
 resource "azurerm_windows_web_app" "dev" {
   name                = "__appservicename__"
   location            = azurerm_resource_group.dev.location
   resource_group_name = azurerm_resource_group.dev.name
-  app_service_plan_id = azurerm_app_service_plan.dev.id
+  service_plan_id     = azurerm_service_plan.dev.id
 
   site_config {
     always_on = false
