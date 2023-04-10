@@ -36,6 +36,10 @@ stages:
               containerExists=$(az storage container exists --account-name $storageAccount --name $containerName | jq '.exists == true')
           fi
           
+          echo $"rg exists: ${rgExists}"
+          echo $"account exists: ${accountExists}"
+          echo $"container exists: ${containerExists}"
+          
           # Create resources that don't exist
           
           if ! $rgExists; then
@@ -52,4 +56,8 @@ stages:
               echo $"Creating storage container ${containerName} for storage account ${storageAccount}"
               az storage container create --name $containerName --account-name $storageAccount
           fi
+          
+          # Set storage account key as Pipeline variable.
+          storageKey=$(az storage account keys list --account-name $storageAccount | jq -r .[0].value)
+          echo $"##vso[task.setvariable variable=storageKey;isOutput=true]${storageKey}"
 
