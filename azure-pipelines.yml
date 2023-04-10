@@ -16,6 +16,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: AzureCLI@2
+      name: azurecli
       inputs:
         azureSubscription: 'az-service-connection'
         scriptType: 'bash'
@@ -62,7 +63,7 @@ stages:
   - job: terraform
     dependsOn: provision_storage
     variables:
-        storageKey: $[ dependencies.provision_storage.outputs['storageKey'] ]
+        storageKey: $[ dependencies.provision_storage.outputs['azurecli.storageKey'] ]
     pool:
       vmImage: ubuntu-latest
     steps:
