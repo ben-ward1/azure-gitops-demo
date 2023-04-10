@@ -8,8 +8,12 @@
 trigger:
 - main
 
+variables:
+  buildConfiguration: 'Release'
+  solution: '**/*.sln'
+
 stages:
-- stage: provision_storage
+- stage: provision
   jobs:
   - job: provision_storage
     pool:
@@ -104,11 +108,6 @@ stages:
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           environmentServiceNameAzureRM: 'az-service-connection'
-          # backendServiceArm: 'az-service-connection'
-          # backendAzureRmResourceGroupName: '$(rgName)'
-          # backendAzureRmStorageAccountName: '$(storageAccountName)'
-          # backendAzureRmContainerName: '$(containerName)'
-          # backendAzureRmKey: 'terraform.tfstate'
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
@@ -116,8 +115,39 @@ stages:
           commandOptions: '-auto-approve'
           environmentServiceNameAzureRM: 'az-service-connection'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-          # backendServiceArm: 'az-service-connection'
-          # backendAzureRmResourceGroupName: '$(rgName)'
-          # backendAzureRmStorageAccountName: '$(storageAccountName)'
-          # backendAzureRmContainerName: '$(containerName)'
-          # backendAzureRmKey: 'terraform.tfstate'
+- stage: build_deploy
+  jobs:
+  - job: build_deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        version: '7.x'
+    - task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        arguments: '--configuration $(buildConfiguration)'
+      displayName: 'dotnet build $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: publish
+        publishWebProjects: True
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: 'sampleApp'
+        publishLocation: 'pipeline'
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'az-service-connection'
+        appType: 'webApp'
+        appName: $(appservicename)
+        package: $(Build.ArtifactStagingDirectory)/**/azure-gitops-demo.zip
+        deploymentMethod: 'auto'
