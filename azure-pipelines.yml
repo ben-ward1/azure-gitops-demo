@@ -24,6 +24,7 @@ stages:
           suffix=$(suffix)
           storageAccountName=$(storageAccountName)
           containerName=$(containerName)
+          azRegion=$(azRegion)
           
           storageAccount="${storageAccountName}${suffix}"
           
@@ -35,7 +36,20 @@ stages:
               containerExists=$(az storage container exists --account-name $storageAccount --name $containerName | jq '.exists == true')
           fi
           
-          echo $"rg exists: ${rgExists}"
-          echo $"account exists: ${accountExists}"
-          echo $"container exists: ${containerExists}"
+          # Create resources that don't exist
+          
+          if ! $rgExists; then
+              echo $"Creating resource group ${rgName} in region ${azRegion}"
+              az group create --location $azRegion --name $rgName
+          fi
+          
+          if ! $accountExists; then
+              echo $"Creating storage account ${storageAccountName}"
+              az storage account create --name $storageAccountName --resource-group $rgName --location $azRegion --sku Standard_LRS
+          fi
+          
+          if ! $containerExists; then
+              echo $"Creating storage container ${containerName} for storage account ${storageAccountName}"
+              az storage container create --name $containerName --account-name $storageAccountName
+          fi
 
