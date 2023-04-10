@@ -72,6 +72,11 @@ stages:
         enableRecursion: false
         useLegacyPattern: false
         enableTelemetry: true
+    - task: Bash@3
+      displayName: 'Test variable'
+      inputs:
+        targetType: 'inline'
+        script: 'echo $(storageKey)'
     - task: TerraformInstaller@1
       inputs:
         terraformVersion: 'latest'
