@@ -86,7 +86,7 @@ stages:
           enableTelemetry: true
       - task: replacetokens@5
         inputs:
-          targetFiles: '**/*.tf,**.*.tfvars'
+          targetFiles: '**.*.tfvars'
           encoding: 'auto'
           tokenPattern: 'rm'
           writeBOM: true
