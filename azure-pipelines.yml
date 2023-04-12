@@ -73,20 +73,7 @@ stages:
     steps:
       - task: replacetokens@5
         inputs:
-          targetFiles: '**/*.tf'
-          encoding: 'auto'
-          tokenPattern: 'rm'
-          writeBOM: true
-          actionOnMissing: 'fail'
-          keepToken: false
-          actionOnNoFiles: 'fail'
-          enableTransforms: false
-          enableRecursion: false
-          useLegacyPattern: false
-          enableTelemetry: true
-      - task: replacetokens@5
-        inputs:
-          targetFiles: '**.*.tfvars'
+          targetFiles: '**/*.tf,**/*.tfvars'
           encoding: 'auto'
           tokenPattern: 'rm'
           writeBOM: true
