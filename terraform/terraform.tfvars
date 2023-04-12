@@ -1,0 +1,10 @@
+rg-name                    = "__rgName__"
+storage-account-name       = "__storageAccountName__"
+storage-account-access-key = "__accessKey"
+storage-container-name     = "__containerName__"
+az-location                = "__azureRegion__"
+app-sp-name                = "__appserviceplan__"
+app-name                   = "__appservicename__"
+sql-admin-login            = "__sql-admin-login__"
+sql-admin-login-password   = "__sql-admin-password__"
+
