@@ -24,6 +24,7 @@ variable "db-server-name" {
   description = "Name of the sql server"
 }
 
+
 variable "db-name" {
   type        = string
   description = "Name of the sql db"
@@ -39,7 +40,7 @@ variable "sql-admin-login-password" {
   description = "The password for the sql server admin"
 }
 
-variable "kv-name" {
+variable "current-ip" {
   type        = string
-  description = "Key Vault name"
+  description = "ip address for the current execution environment"
 }

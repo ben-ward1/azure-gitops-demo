@@ -7,4 +7,9 @@
     <RootNamespace>azure_gitops_demo</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.8.2" />
+  </ItemGroup>
+
 </Project>
