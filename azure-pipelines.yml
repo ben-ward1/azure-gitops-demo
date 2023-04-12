@@ -73,7 +73,7 @@ stages:
     steps:
       - task: replacetokens@5
         inputs:
-          targetFiles: '**/*.tf'
+          targetFiles: '**/*.tf,**.*.tfvars'
           encoding: 'auto'
           tokenPattern: 'rm'
           writeBOM: true
