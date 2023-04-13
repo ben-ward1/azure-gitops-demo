@@ -132,6 +132,7 @@ stages:
       inputs:
         command: 'build'
         arguments: '--configuration $(buildConfiguration)'
+        workingDirectory: $(System.DefaultWorkingDirectory)/src
       displayName: 'dotnet build $(buildConfiguration)'
     - task: DotNetCoreCLI@2
       inputs:
@@ -149,5 +150,5 @@ stages:
         azureSubscription: 'az-service-connection'
         appType: 'webApp'
         appName: $(appservicename)
-        package: $(Build.ArtifactStagingDirectory)/**/azure-gitops-demo.zip
+        package: $(Build.ArtifactStagingDirectory)/**/src.zip
         deploymentMethod: 'auto'
