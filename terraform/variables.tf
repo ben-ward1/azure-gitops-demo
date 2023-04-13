@@ -18,3 +18,28 @@ variable "app-name" {
   type        = string
   description = "The name for the web app"
 }
+
+variable "db-server-name" {
+  type        = string
+  description = "Name of the sql server"
+}
+
+variable "db-name" {
+  type        = string
+  description = "Name of the sql db"
+}
+
+variable "sql-admin-login" {
+  type        = string
+  description = "The login name for the sql server admin"
+}
+
+variable "sql-admin-login-password" {
+  type        = string
+  description = "The password for the sql server admin"
+}
+
+variable "kv-name" {
+  type        = string
+  description = "Key Vault name"
+}
