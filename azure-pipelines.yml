@@ -107,29 +107,14 @@ stages:
           provider: 'azurerm'
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-          commandOptions: '-target="module.infra"'
           environmentServiceNameAzureRM: 'az-service-connection'
       - task: TerraformTaskV4@4
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          commandOptions: '-target="module.infra" -auto-approve'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          commandOptions: '-auto-approve'
           environmentServiceNameAzureRM: 'az-service-connection'
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'plan'
-          commandOptions: '-target="module.key-vault"'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-          environmentServiceNameAzureRM: 'az-service-connection'
-      - task: TerraformTaskV4@4
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          commandOptions: '-target="module.key-vault" -auto-approve'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-          environmentServiceNameAzureRM: 'az-service-connection'
 - stage: build_deploy
   jobs:
   - job: build_deploy
