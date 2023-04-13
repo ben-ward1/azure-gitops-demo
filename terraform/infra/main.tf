@@ -58,8 +58,18 @@ resource "azurerm_mssql_firewall_rule" "azureservicefirewall" {
 
 # Create SQL Server firewall rule for Azure resouces access
 resource "azurerm_mssql_firewall_rule" "currentip" {
-  name             = "allow-azure-service"
+  name             = "allow-iac"
   server_id        = azurerm_mssql_server.db-server.id
   start_ip_address = var.current-ip
   end_ip_address   = var.current-ip
 }
+
+resource "azurerm_key_vault" "key-vault" {
+  name                     = var.kv-name
+  location                 = var.az-location
+  resource_group_name      = var.rg-name
+  tenant_id                = var.tenant-id
+  sku_name                 = "standard"
+  purge_protection_enabled = false
+}
+

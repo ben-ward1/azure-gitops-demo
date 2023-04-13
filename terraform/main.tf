@@ -29,18 +29,31 @@ module "infra" {
   db-name                  = var.db-name
   rg-name                  = var.rg-name
   current-ip               = chomp(data.http.myip.body)
+  kv-name                  = var.kv-name
+  tenant-id                = data.azurerm_client_config.current.tenant_id
 }
 
-module "key-vault" {
-  source               = "./key-vault"
-  az-location          = var.az-location
-  rg-name              = var.rg-name
+module "access" {
+  source               = "./access"
   tenant-id            = data.azurerm_client_config.current.tenant_id
   current-principal-id = data.azurerm_client_config.current.object_id
   web-app-principal-id = module.infra.web-app-principal-id
-  db-admin-logon       = var.sql-admin-login
-  db-admin-password    = var.sql-admin-login-password
-  db-name              = var.db-name
-  db-server-name       = var.db-server-name
-  kv-name              = var.kv-name
+  kv-id                = module.infra.kv-id
+
+  depends_on = [
+    module.infra
+  ]
+}
+
+module "data" {
+  source            = "./data"
+  kv-id             = module.infra.kv-id
+  db-admin-logon    = var.sql-admin-login
+  db-admin-password = var.sql-admin-login-password
+  db-server-name    = var.db-server-name
+  db-name           = var.db-name
+
+  depends_on = [
+    module.access
+  ]
 }
