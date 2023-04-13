@@ -106,6 +106,20 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'plan'
+          commandOptions: '-target="module.infra"'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+          environmentServiceNameAzureRM: 'az-service-connection'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          commandOptions: '-target="module.infra" -auto-approve'
+          environmentServiceNameAzureRM: 'az-service-connection'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+      - task: TerraformTaskV4@4
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
           environmentServiceNameAzureRM: 'az-service-connection'
       - task: TerraformTaskV4@4
