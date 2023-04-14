@@ -1,10 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var connected = (bool)ViewData["connected"];
+    var statusDisplay = connected ? "Connected" : "NOT Connected";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <br/>
-    <p>Db connection: @((bool)(ViewData["connected"]) ? "Connected" : "NOT Connected")</p>
+    <p>Db connection: <b style="color:@(connected ? "green" : "red");font-weight:bold">@statusDisplay</b></p>
 </div>
