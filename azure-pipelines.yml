@@ -160,6 +160,6 @@ stages:
       inputs:
         azureSubscription: 'az-service-connection'
         appType: 'webApp'
-        appName: $(appservicename)
+        appName: '$(app-service-name)-$(suffix)-$(environment-name)'
         package: $(Build.ArtifactStagingDirectory)/**/src.zip
         deploymentMethod: 'auto'
