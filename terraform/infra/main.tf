@@ -3,6 +3,15 @@ resource "azurerm_resource_group" "rg" {
   location = var.az-location
 }
 
+resource "azurerm_key_vault" "key-vault" {
+  name                     = var.kv-name
+  location                 = var.az-location
+  resource_group_name      = var.rg-name
+  tenant_id                = var.tenant-id
+  sku_name                 = "standard"
+  purge_protection_enabled = false
+}
+
 resource "azurerm_service_plan" "dev" {
   name                = var.app-sp-name
   location            = azurerm_resource_group.rg.location
@@ -27,6 +36,10 @@ resource "azurerm_windows_web_app" "dev" {
 
   identity {
     type = "SystemAssigned"
+  }
+
+  app_settings = {
+    "KeyVaultName" = azurerm_key_vault.key-vault.name
   }
 }
 
@@ -62,14 +75,5 @@ resource "azurerm_mssql_firewall_rule" "currentip" {
   server_id        = azurerm_mssql_server.db-server.id
   start_ip_address = var.current-ip
   end_ip_address   = var.current-ip
-}
-
-resource "azurerm_key_vault" "key-vault" {
-  name                     = var.kv-name
-  location                 = var.az-location
-  resource_group_name      = var.rg-name
-  tenant_id                = var.tenant-id
-  sku_name                 = "standard"
-  purge_protection_enabled = false
 }
 
