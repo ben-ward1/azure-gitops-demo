@@ -73,6 +73,7 @@ stages:
           encoding: 'auto'
           tokenPattern: 'rm'
           writeBOM: true
+          verbosity: 'detailed'
           actionOnMissing: 'fail'
           keepToken: false
           actionOnNoFiles: 'fail'
