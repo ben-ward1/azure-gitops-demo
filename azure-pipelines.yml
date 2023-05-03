@@ -23,7 +23,8 @@ stages:
         inlineScript: |
           rgName=$(rgName)
           suffix=$(suffix)
-          storageAccountName="tfstorage$suffix"
+          accountName=$(storageAccountName)
+          storageAccountName="$accountName$suffix"
           containerName=$(containerName)
           azRegion=$(azRegion)
           
